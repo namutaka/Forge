@@ -1,28 +1,14 @@
 #! env ruby
 # -*- encoding: utf-8 -*-
 
-require 'pp'
-require 'rubygems'
-require 'faker'
-
-class Array
-  def pick
-    self[rand(size)]
-  end
-end
-
-
-module Faker
+module Forge
 
   def self.defwords(name, words)
     const_set(name.upcase, words.to_a)
-    class_eval <<-EOS
-      class << self
-        define_method("#{name.downcase}") do |count|
-          chars(const_get("#{name}"), count)
-        end
-      end
-    EOS
+    define_method(name.downcase) do |count|
+      chars(const_get("#{name}"), count)
+    end
+    module_function name.downcase
   end
 
   # U+3040-309F	Hiragana	平仮名
@@ -47,7 +33,7 @@ module Faker
     KANJI, KIGOU, FULLWIDTH].flatten
 
   def self.chars(base, count = 5)
-    repeat(count) { base.pick }.join
+    repeat(count) { base[rand(base.size)] }.join
   end
 
   def self.words(base, num = 5)
@@ -68,13 +54,17 @@ module Faker
     end
   end
 
-  def self.main
+
+end
+
+if __FILE__ == $0
+  require 'pp'
+  require 'rubygems'
+
+  module Forge
     pp words(FULLCHARS, 5)
     pp digits(10)
     pp hiragana(10)
   end
-
 end
-
-Faker.main
 
