@@ -17,8 +17,8 @@ module Forge
   # U+30A0-30FF	Katakana	片仮名
   defwords :KATAKANA, "\u30A1".."\u30F6"
 
-  # U+4E00-9FFF	CJK Unified Ideographs	CJK統合漢字
-  defwords :KANJI, (0x889F..0x88FC).map {|e|[e].inject("".encode "shift_jis") {|s,c|s<<c}.encode "utf-8"}
+  # SJIS
+  defwords :KANJI, (0x889F..0x88FC).map {|e|[e].pack('n').encode("UTF-8", "SHIFT_JIS")}
 
   # U+3000-303F	CJK Symbols and Punctuation	CJKの記号及び句読点
   KUHAKU = "\u3000"
