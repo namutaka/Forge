@@ -1,5 +1,6 @@
-#! env ruby
 # -*- encoding: utf-8 -*-
+# Forge dummy datas
+#
 
 module Forge
 
@@ -17,7 +18,7 @@ module Forge
   defwords :KATAKANA, "\u30A1".."\u30F6"
 
   # U+4E00-9FFF	CJK Unified Ideographs	CJK統合漢字
-  defwords :KANJI, "\u4E00".."\u9FA1"
+  defwords :KANJI, (0x889F..0x88FC).map {|e|[e].inject("".encode "shift_jis") {|s,c|s<<c}.encode "utf-8"}
 
   # U+3000-303F	CJK Symbols and Punctuation	CJKの記号及び句読点
   KUHAKU = "\u3000"
@@ -54,17 +55,8 @@ module Forge
     end
   end
 
-
 end
 
-if __FILE__ == $0
-  require 'pp'
-  require 'rubygems'
 
-  module Forge
-    pp words(FULLCHARS, 5)
-    pp digits(10)
-    pp hiragana(10)
-  end
-end
+require 'forge/record_base'
 
